@@ -28,7 +28,8 @@ function renderColor(x, y) {
 const mouseDown = Rx.Observable.fromEvent(canvas, 'mousedown');
 const mouseUp = Rx.Observable.fromEvent(canvas, 'mouseup');
 const isClicked = Rx.Observable.merge(mouseDown, mouseUp)
-  .map(event => event.type === 'mousedown');
+  .map(event => event.type === 'mousedown')
+  .startWith(false);
 const mouseMove = Rx.Observable.fromEvent(canvas, 'mousemove');
 
 Rx.Observable.combineLatest(mouseMove, isClicked, (event, isClicked) => ({ event, isClicked }))
