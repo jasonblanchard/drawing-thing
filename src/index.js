@@ -1,6 +1,5 @@
 import './index.css';
 
-import colorPicker from './colorPicker';
+import ColorPicker from './colorPicker';
 
-colorPicker.init();
-colorPicker.run();
+new ColorPicker().mount();
