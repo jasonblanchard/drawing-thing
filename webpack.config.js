@@ -36,6 +36,28 @@ module.exports = {
           loader: 'babel-loader'
         }
       },
+      {
+        test: /\.(css|scss)$/,
+        include: relativePath('src'),
+        use: [
+          { loader: 'style-loader' },
+          {
+            loader: 'css-loader',
+            options: {
+              sourceMap: true,
+              localIdentName: '[name]-[local]--[hash:base64:5]'
+            }
+          }
+        ]
+      },
+      {
+        test: /\.(png|jpg|gif)$/,
+        use: [
+          {
+            loader: 'file-loader'
+          }
+        ]
+      }
     ]
   },
   plugins: [
