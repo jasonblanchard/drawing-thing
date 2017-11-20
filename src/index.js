@@ -32,9 +32,18 @@ const isClicked = Rx.Observable.merge(mouseDown, mouseUp)
   .startWith(false);
 const mouseMove = Rx.Observable.fromEvent(canvas, 'mousemove');
 
-Rx.Observable.combineLatest(mouseMove, isClicked, (event, isClicked) => ({ event, isClicked }))
+const selectionState = Rx.Observable.combineLatest(mouseMove, isClicked, (event, isClicked) => ({ event, isClicked }))
   .filter(({ event, isClicked }) => isClicked)
   .map(({ event }) => ({ mouseX: event.layerX, mouseY: event.layerY }))
-  .subscribe(({ mouseX, mouseY }) => {
-    renderColor(mouseX, mouseY)
-  })
+  .map(({ mouseX, mouseY }) => state => ({ ...state, ...{ mouseX, mouseY } }));
+
+const state = Rx.Observable.merge(
+  selectionState
+).scan((state, changeFn) => changeFn(state), {
+  mouseX: 0,
+  mouseY: 0
+});
+
+state.subscribe(state => {
+  renderColor(state.mouseX, state.mouseY);
+});
